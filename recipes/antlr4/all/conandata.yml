@@ -1,9 +1,13 @@
 sources:
-   "4.8":
-      url: "https://www.antlr.org/download/antlr4-cpp-runtime-4.8-source.zip"
-      sha256: "58c9c8f83ed2b2224a047a2ca8af8c7ca2f45bc13ff30bd8777ce65ba81d6d11"
+  "4.9.1":
+    url: "https://www.antlr.org/download/antlr4-cpp-runtime-4.9.1-source.zip"
+    sha256: "21647f9d5c55d13f2297e3f61e5dd68283e439983c27bd899f9c8a725bbea7b5"
+  "4.9.1-antlr.jar":
+    url: "https://www.antlr.org/download/antlr-4.9.1-complete.jar"
+    sha256: "1f645aea79b98e6ff7ec8f6bf7ea82b58cfc60a194cda2a3b1e753589d41f98d"
+
 patches:
-   "4.8":
+  "4.9.1":
     - patch_file: "patches/conanize.patch"
       base_path: "source_subfolder"
     - patch_file: "patches/conanize_runtime.patch"
