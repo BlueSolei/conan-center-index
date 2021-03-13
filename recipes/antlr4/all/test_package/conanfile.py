@@ -1,19 +1,21 @@
 from conans import ConanFile, CMake, tools
 import os
+import subprocess
 
 
 class TestPackageConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    generators = ["cmake"]
 
     def build(self):
         cmake = CMake(self)
+        cmake.definitions["PROJECT_SOURCE_DIR"] = "."
+        cmake.definitions["Java_JAVA_EXECUTABLE"] = "java"
+        cmake.definitions["ANTLR_JAR_LOCATION"] = self.env["ANTLR_EXECUTABLE"]
         cmake.configure()
         cmake.build()
 
     def test(self):
         if not tools.cross_building(self.settings):
-            bin_path = os.path.join("bin", "test_package")
-            self.run(bin_path, run_environment=True)
+            os.chdir("bin")
+            self.run(".{}antlr4-demo".format(os.sep))
