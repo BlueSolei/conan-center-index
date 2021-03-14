@@ -13,7 +13,7 @@ class Antlr4Conan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
     generators = "cmake"
-    version = "4.9.1"
+
     _cmake = None
 
     @property
@@ -31,9 +31,9 @@ class Antlr4Conan(ConanFile):
     def source(self):
         tools.get(**self.conan_data["sources"][self.version]["code"],
                   destination=self._source_subfolder)
-        filename = os.path.join(self._source_subfolder, "antlr.jar")
+        antlr_jar = os.path.join(self._source_subfolder, "antlr.jar")
         tools.download(
-            **self.conan_data["sources"][self.version]["jar"], filename=filename)
+            **self.conan_data["sources"][self.version]["jar"], filename=antlr_jar)
 
     def build(self):
         cmake = self._configure_cmake()
