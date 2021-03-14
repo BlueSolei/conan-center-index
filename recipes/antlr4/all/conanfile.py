@@ -29,7 +29,7 @@ class Antlr4Conan(ConanFile):
             del self.options.fPIC
 
     def source(self):
-        tools.get(**self.conan_data["sources"][self.version]["sources"],
+        tools.get(**self.conan_data["sources"][self.version]["code"],
                   destination=self._source_subfolder)
         filename = os.path.join(self._source_subfolder, "antlr.jar")
         tools.download(
@@ -50,20 +50,20 @@ class Antlr4Conan(ConanFile):
         return self._cmake
 
     def package(self):
-        self.copy(pattern="LICENSE.txt", dst="licenses",
-                  src=self._source_subfolder)
-        self.copy("*.h", dst="include",
-                  src=os.path.join(self._source_subfolder, "runtime", "src"))
-        self.copy("*.a", dst="lib", keep_path=False)
+        dist = os.path.join(self._source_subfolder, "dist")
+        include = os.path.join(self._source_subfolder, "runtime", "src")
+
         self.copy("*.jar", dst="bin",
                   src=self._source_subfolder, keep_path=False)
-        self.copy(
-            pattern="*.so*",
-            dst="lib",
-            src=os.path.join(self._source_subfolder, "dist"),
-            keep_path=False,
-            symlinks=True,
-        )
+
+        self.copy(pattern="LICENSE.txt", dst="licenses",
+                  src=self._source_subfolder)
+        self.copy("*.h", dst="include", src=include)
+        self.copy("*.a", dst="lib", src=dist, keep_path=False)
+        self.copy("*.lib", dst="lib", src=dist, keep_path=False)
+        self.copy("*.so*", dst="lib", src=dist, keep_path=False)
+        self.copy("*.dylib", dst="lib", src=dist, keep_path=False)
+        self.copy("*.dll", dst="bin", src=dist, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["antlr4-runtime"]

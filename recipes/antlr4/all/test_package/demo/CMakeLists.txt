@@ -1,4 +1,6 @@
 # -*- mode:cmake -*-
+cmake_minimum_required(VERSION 2.8)
+
 if(NOT UNIX)
   message(WARNING "Unsupported operating system")
 endif()
@@ -28,7 +30,7 @@ add_custom_command(OUTPUT ${antlr4-demo-GENERATED_SRC}
    "${Java_JAVA_EXECUTABLE}" -jar ${ANTLR_JAR_LOCATION} -Werror -Dlanguage=Cpp -listener -visitor -o ${PROJECT_SOURCE_DIR}/demo/generated/ -package antlrcpptest ${PROJECT_SOURCE_DIR}/demo/TLexer.g4 ${PROJECT_SOURCE_DIR}/demo/TParser.g4
    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
    DEPENDS ${PROJECT_SOURCE_DIR}/demo/TLexer.g4 ${PROJECT_SOURCE_DIR}/demo/TParser.g4
-   COMMENT  "antlr4 code generating. ${PROJECT_SOURCE_DIR}/demo/TLexer.g4 ${PROJECT_SOURCE_DIR}/demo/TParser.g4"
+   COMMENT  "antlr4 code generation (lexer + parser)"
    )
 
 include_directories(
@@ -73,7 +75,6 @@ endif()
 add_dependencies(antlr4-demo GenerateParser)
 
 target_link_libraries(antlr4-demo ${CONAN_LIBS})
-# antlr4_runtime)
 
 install(TARGETS antlr4-demo 
         DESTINATION "share" 
