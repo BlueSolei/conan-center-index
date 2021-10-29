@@ -8,7 +8,7 @@ conan_basic_setup()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# find_package(Java)
+find_package(Java COMPONENTS Runtime REQUIRED)
 
 if(NOT UNIX)
   message(WARNING "Unsupported operating system")
@@ -43,7 +43,6 @@ add_custom_command(
 
 include_directories(${PROJECT_SOURCE_DIR}/generated)
 
-# file(GLOB antlr4-demo_SRC "${PROJECT_SOURCE_DIR}/generated/*")
 set(antlr4-demo_SRC ${PROJECT_SOURCE_DIR}/main.cpp
                     ${antlr4-demo-GENERATED_SRC})
 
@@ -70,7 +69,4 @@ add_dependencies(antlr4-demo GenerateParser)
 
 target_link_libraries(antlr4-demo ${CONAN_LIBS})
 
-install(
-  TARGETS antlr4-demo
-  DESTINATION "share"
-  COMPONENT dev)
+install(TARGETS antlr4-demo)

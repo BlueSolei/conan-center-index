@@ -1,6 +1,5 @@
 from conans import ConanFile, CMake, tools
 import os
-import subprocess
 
 
 class TestPackageConan(ConanFile):
@@ -9,8 +8,6 @@ class TestPackageConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.definitions["PROJECT_SOURCE_DIR"] = "."
-        cmake.definitions["Java_JAVA_EXECUTABLE"] = "java"
         cmake.definitions["ANTLR_JAR_LOCATION"] = self.env["ANTLR_EXECUTABLE"]
         cmake.configure()
         cmake.build()
