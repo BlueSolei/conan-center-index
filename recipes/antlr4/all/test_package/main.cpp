@@ -31,9 +31,7 @@ int main(int , const char **) {
 
   TParser parser(&tokens);
   tree::ParseTree* tree = parser.main();
-
-  std::cout << tree->toStringTree(&parser) << std::endl << std::endl;
-
-  std::out << "antlr4 conan test package succeeded!\n\n";
+  std::cout << tree->toStringTree(&parser) << std::endl;
+  std::cout << "antlr4 conan test package build succeeded!\n";
   return 0;
 }
