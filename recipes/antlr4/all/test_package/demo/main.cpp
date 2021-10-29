@@ -34,5 +34,6 @@ int main(int , const char **) {
 
   std::cout << tree->toStringTree(&parser) << std::endl << std::endl;
 
+  std::out << "antlr4 conan test package succeeded!\n\n";
   return 0;
 }
