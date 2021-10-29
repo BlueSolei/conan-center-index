@@ -67,5 +67,6 @@ class Antlr4Conan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["antlr4-runtime"]
-        self.env_info.ANTLR_EXECUTABLE = os.path.join(
-            self.package_folder, "bin", "antlr.jar")
+        antlr_jar=os.path.join(self.package_folder, "bin", "antlr.jar")
+        self.user_info.antlr_jar=antlr_jar
+        self.env_info.ANTLR_JAR=antlr_jar

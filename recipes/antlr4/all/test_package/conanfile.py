@@ -8,7 +8,6 @@ class TestPackageConan(ConanFile):
 
     def build(self):
         cmake = CMake(self)
-        cmake.definitions["ANTLR_JAR_LOCATION"] = self.env["ANTLR_EXECUTABLE"]
         cmake.configure()
         cmake.build()
 
