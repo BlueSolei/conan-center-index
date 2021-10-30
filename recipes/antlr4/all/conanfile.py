@@ -65,20 +65,21 @@ class Antlr4Conan(ConanFile):
         dist = os.path.join(self._source_subfolder, "dist")
         include = os.path.join(self._source_subfolder, "runtime", "src")
 
-        self.copy("*.jar", dst="bin",
-                  src=self._source_subfolder, keep_path=False)
+        # antlr tool
+        self.copy("*/antlr.jar", dst="bin", keep_path=False)
 
-        self.copy(pattern="LICENSE.txt", dst="licenses",
-                  src=self._source_subfolder)
-        self.copy("FindANTLR.cmake", dst="cmake",
-                  src=os.path.join(self._source_subfolder, "cmake"), keep_path=False)
-        self.copy("Antlr4.cmake", dst="cmake",  keep_path=False)
+        # antlr runtime
+        self.copy("*/LICENSE.txt", dst="licenses", keep_path=False)
         self.copy("*.h", dst="include", src=include)
         self.copy("*.a", dst="lib", src=dist, keep_path=False)
         self.copy("*.lib", dst="lib", src=dist, keep_path=False)
         self.copy("*.so*", dst="lib", src=dist, keep_path=False)
         self.copy("*.dylib", dst="lib", src=dist, keep_path=False)
         self.copy("*.dll", dst="bin", src=dist, keep_path=False)
+
+        # antlr utils (generate parsers\lexers in CMake scripts)
+        self.copy("*/FindANTLR.cmake", dst="cmake", keep_path=False)
+        self.copy("Antlr4.cmake", dst="cmake",  keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = ["antlr4-runtime"]
