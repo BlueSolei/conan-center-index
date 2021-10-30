@@ -5,7 +5,7 @@ project(antlr4-demo)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-include(cmake/Antlr4)
+include(Antlr4)
 
 add_executable(antlr4-demo)
 install(TARGETS antlr4-demo)
