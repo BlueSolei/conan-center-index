@@ -18,7 +18,7 @@ class Antlr4Conan(ConanFile):
 
     @property
     def _source_subfolder(self):
-        return "source_subfolder"
+        return os.path.join("source_subfolder", f"antlr4-{self.version}", "runtime", "Cpp")
 
     @property
     def _build_subfolder(self):
@@ -30,7 +30,7 @@ class Antlr4Conan(ConanFile):
 
     def source(self):
         src = self.conan_data["sources"][self.version]
-        tools.get(**src["code"], destination=self._source_subfolder)
+        tools.get(**src["code"], destination="source_subfolder")
         antlr_executable = os.path.join(self._source_subfolder, "antlr.jar")
         tools.download(**src["jar"], filename=antlr_executable)
 
@@ -44,7 +44,7 @@ class Antlr4Conan(ConanFile):
             return self._cmake
 
         try:
-          use_static_crt = self.settings.compiler.runtime in ['static', "MT", "MTd"]
+          use_static_crt = self.settings.compiler.runtime in ["MT", "MTd"]
         except Exception:
           use_static_crt = None
 
@@ -54,8 +54,8 @@ class Antlr4Conan(ConanFile):
           use_libcpp = None
 
         self._cmake = CMake(self)
-        self._cmake.definitions["ANTLR4_WITH_STATIC_CRT"] = "ON" if use_static_crt else "OFF"
         self._cmake.definitions["WITH_LIBCXX"] = "ON" if use_libcpp else "OFF"
+        self._cmake.definitions["WITH_STATIC_CRT"] = "ON" if use_static_crt else "OFF"
         self._cmake.configure(build_folder=self._build_subfolder,
                               source_folder=self._source_subfolder)
         return self._cmake
