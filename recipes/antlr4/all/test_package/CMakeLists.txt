@@ -2,9 +2,10 @@
 cmake_minimum_required(VERSION 3.8)
 project(antlr4-demo)
 
-include(Antlr4.cmake)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
+
+include(cmake/Antlr4)
 
 add_executable(antlr4-demo)
 install(TARGETS antlr4-demo)

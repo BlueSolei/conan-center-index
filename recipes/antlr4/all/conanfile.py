@@ -12,6 +12,7 @@ class Antlr4Conan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = {"shared": False, "fPIC": True}
+    exports = "Antlr4.cmake"
     generators = "cmake"
 
     _cmake = None
@@ -44,14 +45,14 @@ class Antlr4Conan(ConanFile):
             return self._cmake
 
         try:
-          use_static_crt = self.settings.compiler.runtime in ["MT", "MTd"]
+            use_static_crt = self.settings.compiler.runtime in ["MT", "MTd"]
         except Exception:
-          use_static_crt = None
+            use_static_crt = None
 
         try:
-          use_libcpp = self.settings.compiler.libcxx == "libc++"
+            use_libcpp = self.settings.compiler.libcxx == "libc++"
         except Exception:
-          use_libcpp = None
+            use_libcpp = None
 
         self._cmake = CMake(self)
         self._cmake.definitions["WITH_LIBCXX"] = "ON" if use_libcpp else "OFF"
@@ -69,6 +70,9 @@ class Antlr4Conan(ConanFile):
 
         self.copy(pattern="LICENSE.txt", dst="licenses",
                   src=self._source_subfolder)
+        self.copy("*.cmake", dst="cmake",
+                  src=self._source_subfolder, keep_path=False)
+        self.copy("Antlr4.cmake", dst="cmake",  keep_path=False)
         self.copy("*.h", dst="include", src=include)
         self.copy("*.a", dst="lib", src=dist, keep_path=False)
         self.copy("*.lib", dst="lib", src=dist, keep_path=False)
@@ -78,6 +82,8 @@ class Antlr4Conan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["antlr4-runtime"]
+        self.cpp_info.set_property("cmake_build_modules", [os.path.join(
+            self.package_folder, "cmake", "Antlr4.cmake")])
         antlr_executable = os.path.join(
             self.package_folder, "bin", "antlr.jar")
         self.user_info.antlr_executable = antlr_executable
