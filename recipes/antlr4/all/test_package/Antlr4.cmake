@@ -49,7 +49,7 @@ function(antlr4_generate_parser target)
   set(GENERATE_PARSER_CMD
       "${Java_JAVA_EXECUTABLE}"
       -jar
-      ${CONAN_USER_ANTLR4_antlr_jar}
+      ${CONAN_USER_ANTLR4_antlr_executable}
       -Xexact-output-dir
       -Werror
       -Dlanguage=Cpp
