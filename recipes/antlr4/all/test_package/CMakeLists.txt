@@ -1,5 +1,5 @@
 # -*- mode:cmake -*-
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.8)
 project(antlr4-demo)
 
 include(Antlr4.cmake)
