@@ -7,10 +7,6 @@ find_package(
   COMPONENTS Runtime
   REQUIRED)
 
-if(NOT UNIX)
-  message(WARNING "Unsupported operating system")
-endif()
-
 # generate parser for taget
 function(antlr4_generate_parser target)
   cmake_parse_arguments(PARSE_ARGV 1 ARG "" "NAME"
@@ -21,20 +17,6 @@ function(antlr4_generate_parser target)
   endif()
   set(GENERATED_SOURCES_DIR ${CMAKE_CURRENT_BINARY_DIR})
   set(GRAMMER_TARGET "${target}-${NAME}")
-
-  # Antlr4 requires C++11 or newer stansrad
-  get_target_property(CPP_STD ${target} CXX_STANDARD)
-  if(NOT CPP_STD)
-    message(
-      WARNING
-        "Antlr4: antlr's parsers require at least C++11. seting C++11 standard for target '${target}'"
-    )
-    set_target_properties(
-      ${target}
-      PROPERTIES CXX_STANDARD 11
-                 CXX_STANDARD_REQUIRED YES
-                 CXX_EXTENSIONS NO)
-  endif()
 
   # ~~~
   # Make the generated files depend on the grammer files
@@ -79,4 +61,7 @@ function(antlr4_generate_parser target)
 
   target_sources(${target} PRIVATE ${GENERATED_SOURCES})
   target_include_directories(${target} PRIVATE ${GENERATED_SOURCES_DIR})
+  # Antlr4 requires C++11 or newer stansrad
+  target_compile_features(${target} PUBLIC cxx_std_11)
+  target_compile_definitions(${target} PUBLIC ANTLR4CPP_STATIC)
 endfunction()

@@ -7,7 +7,7 @@ class Antlr4Conan(ConanFile):
     license = "BSD-3-Clause"
     url = "https://github.com/conan-io/conan-center-index"
     homepage = "https://www.antlr.org/"
-    topics = ("conan", "antlr", "parsers")
+    topics = ("parse", "parsing", "parser-generator", "grammar", "antlr", "antlr4", "language-recognition")
     description = "C++ runtime support for ANTLR"
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -57,6 +57,11 @@ class Antlr4Conan(ConanFile):
         self._cmake = CMake(self)
         self._cmake.definitions["WITH_LIBCXX"] = "ON" if use_libcpp else "OFF"
         self._cmake.definitions["WITH_STATIC_CRT"] = "ON" if use_static_crt else "OFF"
+
+        # this is SUPPOSE to be done automatically. 
+        # for some wired bug, this is needed to be set explicitly        
+        self._cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type 
+        
         self._cmake.configure(build_folder=self._build_subfolder,
                               source_folder=self._source_subfolder)
         return self._cmake
@@ -78,15 +83,18 @@ class Antlr4Conan(ConanFile):
         self.copy("*.dll", dst="bin", src=dist, keep_path=False)
 
         # antlr utils (generate parsers\lexers in CMake scripts)
-        self.copy("*/FindANTLR.cmake", dst="cmake", keep_path=False)
-        self.copy("Antlr4.cmake", dst="cmake",  keep_path=False)
+        self.copy("*/FindANTLR.cmake", dst="bin/cmake", keep_path=False)
+        self.copy("Antlr4.cmake", dst="bin/cmake",  keep_path=False)
 
     def package_info(self):
-        self.cpp_info.libs = ["antlr4-runtime"]
-        self.cpp_info.builddirs = ["cmake"]
-        # \todo uncomment when find a way to run Antlr4.cmake automatically
-        # self.cpp_info.set_property("cmake_build_modules", [os.path.join(
-        #     self.package_folder, "cmake", "Antlr4.cmake")])
+        if self.settings.os == "Windows" and not self.options.shared:
+          libname = f"antlr4-runtime-static"
+        else:
+          libname = "antlr4-runtime"
+          
+        self.cpp_info.libs = [libname]
+        self.cpp_info.builddirs = ["bin/cmake"]
+        self.cpp_info.set_property("cmake_build_modules", [os.path.join("bin", "cmake", "Antlr4.cmake")])
         antlr_executable = os.path.join(
             self.package_folder, "bin", "antlr.jar")
         self.user_info.antlr_executable = antlr_executable
