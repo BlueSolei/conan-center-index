@@ -5,13 +5,9 @@ project(antlr4-demo)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-include(Antlr4)
-
 add_executable(antlr4-demo)
 install(TARGETS antlr4-demo)
 target_sources(antlr4-demo PRIVATE ./main.cpp)
-# antlr parser requires at least c++11
-target_compile_features(antlr4-demo PRIVATE cxx_std_11)
 target_link_libraries(antlr4-demo ${CONAN_LIBS})
 
 antlr4_generate_parser(
@@ -26,3 +22,8 @@ antlr4_generate_parser(
   -visitor
   -package
   antlrcpptest)
+
+# antlr parser requires at least c++11
+# if not set, antlr4_generate_parser() set it for us 
+# so you don't have to set it yourself
+# target_compile_features(antlr4-demo PRIVATE cxx_std_11)
