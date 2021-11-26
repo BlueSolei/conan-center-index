@@ -11,6 +11,10 @@ class TestPackageConan(ConanFile):
         cmake.configure()
         cmake.build()
 
+    def imports(self):
+      self.copy("*.dll", src="bin", dst="bin", keep_path=False)
+      self.copy("*.dylib", src="lib", dst="lib", keep_path=False)
+      
     def test(self):
         if not tools.cross_building(self.settings):
             os.chdir("bin")
