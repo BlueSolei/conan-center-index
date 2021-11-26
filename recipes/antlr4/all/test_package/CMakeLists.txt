@@ -24,6 +24,6 @@ antlr4_generate_parser(
   antlrcpptest)
 
 # antlr parser requires at least c++11
-# if not set, antlr4_generate_parser() set it for us 
+# if not set, antlr4_generate_parser() set it for us like this: 
+#   target_compile_features(antlr4-demo PRIVATE cxx_std_11)
 # so you don't have to set it yourself
-# target_compile_features(antlr4-demo PRIVATE cxx_std_11)
